@@ -1,0 +1,82 @@
+<div class="main">
+  <form class="form">
+    <h1 class="heading">Login</h1>
+
+    <div class="spacer"></div>
+
+    <div class="form-group">
+      <label for="email" class="form-label">Email</label>
+      <input
+        id="email"
+        name="email"
+        type="text"
+        placeholder="Ex: email@domain.com"
+        class="form-control"
+      />
+      <span class="form-message email"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="password" class="form-label">Password</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        placeholder="Enter your password"
+        class="form-control"
+      />
+      <span class="form-message password"></span>
+    </div>
+
+    <div class="form-feature">
+      <div>
+        <input type="checkbox" value="lsRememberMe" id="rememberMe"> <label for="rememberMe">Remember me</label>
+      </div>
+      <div>
+        <a href="#">Forget password?</a>
+      </div>
+    </div>
+
+    <button class="form-submit">LOG IN</button>
+
+    <div style="margin-top: 20px">
+      <a href="/account/register">Don't have account? Register</a>
+    </div>
+  </form>
+</div>
+
+
+<script>
+  const form = document.querySelector('form')
+  const errEmail = document.querySelector('.form-message.email')
+  const errPassword = document.querySelector('.form-message.password')
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Get value inputs
+    const email = form.email.value
+    const password = form.password.value
+
+    try {
+      const res = await fetch('/account/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: { 'Content-Type': 'application/json'}
+      })
+      const data = await res.json()
+      console.log(data)
+      if(data.errors) {
+        errEmail.textContent = data.errors.email
+        errPassword.textContent = data.errors.password
+      }
+      if(data.user) {
+        location.assign('/')
+      }
+
+    } catch (err) {
+      console.log(err)
+    }
+
+  })
+</script>

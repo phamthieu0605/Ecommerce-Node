@@ -1,0 +1,11 @@
+<div class="profile">
+  <% if(user) { %>
+    <div class="profile-avatar">
+      <img class="profile-img" src="<%= user.avatar %>" alt="">
+      <div class="change-avatar">
+        <i class="fas fa-camera"></i>
+      </div>
+    </div>
+    <h1><%= user.fullname %></h1>
+  <% } %>
+</div>

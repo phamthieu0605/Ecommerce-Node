@@ -1,0 +1,78 @@
+<header>
+  <div class="container">
+    <div class="header-1">
+      <a href="/" class="logo"><i class="fa fa-shopping-bag"></i> shopping</a>
+      <div class="form-container">
+        <form action="">
+          <input type="search" placeholder="search..." id="search" title="What do you need?" />
+          <button for="search" class="fa fa-search" title="Search"></button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!--header-1-->
+  <div class="header-2">
+    <div class="container flex-header">
+      <div id="menu" class="fa fa-bars"></div>
+      <nav class="navbar">
+        <ul>
+          <li class="navbar-item-active"><a href="/" title="Home">Home</a></li>
+          <li><a href="/product" title="Product">Product</a></li>
+          <li><a href="#">Featured</a></li>
+          <li><a href="#">Gallery</a></li>
+          <li><a href="#">Deal</a></li>
+        </ul>
+      </nav>
+      <div class="icons">
+        <a href="#" class="fa fa-heart"></a>
+        <a href="#" class="fa fa-shopping-cart" title="Cart"></a>
+        <% if (user) { %>
+        <img href="#" id="show-info-user" src="<%= user.avatar %>" title="Account"></img>
+          <div id="user">
+            <a href="/user/info" class="user-info">
+              <img src="<%= user.avatar %>" alt="">
+              <div class="user-name">
+                <span><%= user.fullname %></span>
+                <h6 style="font-size: 1.5rem;">See your profile</h6>
+              </div>
+            </a>
+            <hr>
+            <a href="/account/logout">Log Out</a>
+          </div>
+        <% } else { %>
+          <a href="/account/login" class="fa fa-user" title="Account"></a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+
+  // Active item menu
+  $(function() {
+    $('ul li a').each(function() {
+      var isActive = this.pathname === location.pathname
+      $(this).parent().toggleClass('navbar-item-active', isActive)
+    })
+  })
+
+  // Show info user
+  const showInfo = $('#show-info-user');
+  const userThumb = $('#user');
+
+  showInfo.click((e) => {
+    if(userThumb.css('display') === 'block') {
+      userThumb.hide(200);
+    } else {
+      userThumb.show(200);
+    }
+    e.stopPropagation();
+  })
+  userThumb.click((e) => {
+    e.stopPropagation();
+  });
+  $(document).click(() => {
+    userThumb.hide(200);
+  });
+</script>

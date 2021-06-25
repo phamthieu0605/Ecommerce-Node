@@ -1,0 +1,125 @@
+<div class="main">
+  <form class="form">
+    <h3 class="heading">Register</h3>
+
+    <div class="spacer"></div>
+
+    <div class="form-group">
+      <label for="fullname" class="form-label">Full Name</label>
+      <input
+        id="fullname"
+        name="fullname"
+        type="text"
+        placeholder="Ex: Phạm Quang Thiều"
+        class="form-control"
+      />
+      <span class="form-message fullname"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="phone" class="form-label">Phone Number</label>
+      <input
+        id="phone"
+        name="phone"
+        type="tel"
+        placeholder="Ex: 0335 601 670"
+        class="form-control"
+      />
+      <span class="form-message phone"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="email" class="form-label">Email</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        placeholder="Ex: email@domain.com"
+        class="form-control"
+      />
+      <span class="form-message email"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="password" class="form-label">Password</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        placeholder="Enter your password"
+        class="form-control"
+      />
+      <span class="form-message password"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="repassword" class="form-label">Password Confirm</label>
+      <input
+        id="repassword"
+        name="repassword"
+        placeholder="Password Confirm"
+        type="password"
+        class="form-control"
+      />
+      <span class="form-message repassword"></span>
+    </div>
+
+    <button class="form-submit">REGISTER</button>
+
+    <div style="margin-top: 20px">
+      <a href="/account/login">Already have account? Login</a>
+    </div>
+  </form>
+</div>
+
+<script>
+  const form = document.querySelector('form');
+  const errFullname = document.querySelector('.form-message.fullname')
+  const errPhone = document.querySelector('.form-message.phone')
+  const errEmail = document.querySelector('.form-message.email')
+  const errPassword = document.querySelector('.form-message.password')
+  const errRepass = document.querySelector('.form-message.repassword')
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Reset errors
+    errFullname.textContent = ''
+    errPhone.textContent = ''
+    errEmail.textContent = ''
+    errPassword.textContent = ''
+    errRepass.textContent = ''
+
+    // Get value inputs
+    const fullname = form.fullname.value
+    const phone = form.phone.value
+    const email = form.email.value
+    const password = form.password.value
+    const repassword = form.repassword.value
+
+    if(password !== repassword) {
+      errRepass.textContent = 'Password don\'t match'
+      return
+    }
+    try {
+      const res = await fetch('/account/register', { 
+        method: 'POST',
+        body: JSON.stringify({ fullname, phone, email, password }),
+        headers: { 'Content-Type': 'application/json'}
+      })
+      const data = await res.json()
+      console.log(data)
+      if(data.errors) {
+        errFullname.textContent = data.errors.fullname
+        errPhone.textContent = data.errors.phone
+        errEmail.textContent = data.errors.email
+        errPassword.textContent = data.errors.password
+      }
+      if(data.user) {
+        location.assign('/account/login')
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  })
+</script>
